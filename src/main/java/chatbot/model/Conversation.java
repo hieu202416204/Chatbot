@@ -1,17 +1,21 @@
 package chatbot.model;
 
-import chatbot.repository.ConversationRepository;
-
-import javax.imageio.plugins.tiff.TIFFImageReadParam;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Conversation {
     private int id;
     private String title;
     private int user_id;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
     public Conversation(){}
+    public Conversation(int id, String title, int user_id, LocalDateTime created_at, LocalDateTime updated_at){
+        this.id = id;
+        this.title = title;
+        this.user_id = user_id;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+    }
 
     @Override
     public String toString() {
@@ -36,11 +40,11 @@ public class Conversation {
         return user_id;
     }
 
-    public Timestamp getCreated_at() {
+    public LocalDateTime getCreated_at() {
         return created_at;
     }
 
-    public Timestamp getUpdated_at() {
+    public LocalDateTime getUpdated_at() {
         return updated_at;
     }
 
@@ -56,11 +60,11 @@ public class Conversation {
         this.user_id = user_id;
     }
 
-    public void setCreated_at(Timestamp created_at) {
+    public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
 
-    public void setUpdated_at(Timestamp updated_at) {
+    public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
 }

@@ -2,6 +2,7 @@ package chatbot.model;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class User {
     private int id;
@@ -9,9 +10,17 @@ public class User {
     private String password_hash;
     private String email;
     private String user_role;
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     public User(){}
+    public User(int id, String name, String email, String password_hash,String user_role, LocalDateTime timestamp){
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password_hash = password_hash;
+        this.user_role = user_role;
+        this.created_at = timestamp;
+    }
 
     @Override
     public String toString() {
@@ -65,11 +74,11 @@ public class User {
         this.user_role = user_role;
     }
 
-    public Timestamp getCreated_at() {
+    public LocalDateTime getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Timestamp created_at) {
+    public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
 }

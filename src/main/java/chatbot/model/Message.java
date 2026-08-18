@@ -1,15 +1,23 @@
 package chatbot.model;
 
-import java.sql.Timestamp;
+
+import java.time.LocalDateTime;
 
 public class Message {
     private int id;
     private int conversation_id;
     private String content;
     private String role;
-    private Timestamp created_at;
+    private LocalDateTime created_at;
 
     public Message(){}
+    public Message(int id, int conversation_id, String content, String role,LocalDateTime created_at ){
+        this.id = id;
+        this.content = content;
+        this.conversation_id = conversation_id;
+        this.created_at = created_at;
+        this.role = role;
+    }
 
     @Override
     public String toString() {
@@ -54,11 +62,11 @@ public class Message {
         this.role = role;
     }
 
-    public Timestamp getCreated_at() {
+    public LocalDateTime getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Timestamp created_at) {
+    public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
 }

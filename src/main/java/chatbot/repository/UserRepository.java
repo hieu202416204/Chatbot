@@ -5,6 +5,9 @@ import chatbot.model.User;
 import chatbot.repository.interfaces.UserRInterface;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository implements UserRInterface {
     @Override
@@ -46,11 +49,12 @@ public class UserRepository implements UserRInterface {
             ps.setInt(1, userID);
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    user.setId(userID);
+                    user.setId(rs.getInt("id"));
                     user.setUser_role(rs.getString("user_role"));
                     user.setName(rs.getString("user_name"));
                     user.setEmail(rs.getString("email"));
                     user.setPassword_hash(rs.getString("password_hash"));
+                    user.setCreated_at(rs.getObject("created_at", LocalDateTime.class));
                     System.out.println("FOUND USER!");
                     return user;
                 }
@@ -82,6 +86,7 @@ public class UserRepository implements UserRInterface {
                     user.setName(rs.getString("user_name"));
                     user.setEmail(rs.getString("email"));
                     user.setPassword_hash(rs.getString("password_hash"));
+                    user.setCreated_at(rs.getObject("created_at", LocalDateTime.class));
                     System.out.println("FOUND USER!");
                     return user;
                 }
@@ -146,5 +151,26 @@ public class UserRepository implements UserRInterface {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<User> getAllUsers(){
+        List<User> list = new ArrayList<>();
+        String sql = """
+                select * from \"user\"
+                """;
+        try(Connection c = Connections.getConnection(); PreparedStatement ps = c.prepareStatement(sql)){
+            ResultSet resultSet = ps.executeQuery();
+            while(resultSet.next()){
+                LocalDateTime time = resultSet.getObject("created_at", LocalDateTime.class);
+                User user = new User(resultSet.getInt("id"), resultSet.getString("user_name"),
+                        resultSet.getString("email"), resultSet.getString("password_hash"),resultSet.getString("user_role"), time);
+                list.add(user);
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return list;
     }
 }
