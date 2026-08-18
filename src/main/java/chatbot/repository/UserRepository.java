@@ -11,11 +11,14 @@ import java.util.List;
 
 public class UserRepository implements UserRInterface {
     @Override
-    public boolean createUser(String name, String email, String pwHash) {
+    public boolean createUser(User user) {
         String sql = """
                 insert into \"user\"(user_name, email, password_hash)
                 values (?, ?, ?)
                 """;
+        String name = user.getName();
+        String email = user.getEmail();
+        String pwHash = user.getPassword_hash();
         try(Connection c = Connections.getConnection(); PreparedStatement ps = c.prepareStatement(sql))
         {
             ps.setString(1, name);

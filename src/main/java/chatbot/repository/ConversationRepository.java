@@ -2,39 +2,44 @@ package chatbot.repository;
 
 import chatbot.config.Connections;
 import chatbot.model.Conversation;
+import chatbot.model.User;
 import chatbot.repository.interfaces.ConversationRInterface;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConversationRepository implements ConversationRInterface {
     @Override
-    public boolean createConversation(String title, int userID) {
+    public int createConversation(Conversation conversation) {
         String sql = """
                 insert into conversation(title, user_id) values(?,?)
                 """;
-        try(Connection c = Connections.getConnection(); PreparedStatement ps = c.prepareStatement(sql)){
+        String title = conversation.getTitle();
+        int userID = conversation.getUser_id();
+        try(Connection c = Connections.getConnection(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             ps.setString(1,title);
             ps.setInt(2, userID);
             int check = ps.executeUpdate();
             if(check>0){
                 System.out.println("ADD SUCCESSFUL!");
-                return true;
+                ResultSet rs = ps.getGeneratedKeys();
+                if(rs.next()){
+                    int keyID = rs.getInt(1);
+                    return keyID;
+                }
+                return -1;
             }
             else{
                 System.out.println("ADD FAILED!");
-                return false;
+                return -1;
             }
         }
         catch (SQLException e){
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     @Override
@@ -153,4 +158,26 @@ public class ConversationRepository implements ConversationRInterface {
         }
         return null;
     }
+
+    @Override
+    public List<Conversation> getAllUserConversations(User user){
+        List<Conversation> list = new ArrayList<>();
+        String sql = """
+                select * from conversation where user_id = ?
+                """;
+        try(Connection c = Connections.getConnection(); PreparedStatement ps = c.prepareStatement(sql)){
+            ps.setInt(1, user.getId());
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Conversation conversation = new Conversation(rs.getInt("id"),rs.getString("title"), rs.getInt("user_id"), rs.getObject("created_at", LocalDateTime.class), rs.getObject("updated_at", LocalDateTime.class));
+                list.add(conversation);
+            }
+            System.out.println("SUCCESSFUL!");
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

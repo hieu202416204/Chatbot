@@ -5,7 +5,7 @@ import chatbot.model.User;
 import java.util.List;
 
 public interface UserRInterface {
-    boolean createUser(String name, String email, String pwHash);
+    boolean createUser(User user);
     User findUserByID(int userID);
     User findUserByEmail(String userEmail);
     boolean deleteUserByID(int userID);
