@@ -1,12 +1,13 @@
 package chatbot.service.interfaces;
 
-import chatbot.model.User;
+import chatbot.DTO.UserRequestDTO;
+import chatbot.DTO.UserResponseDTO;
 
 
 public interface UserSInterface {
-    User createUser(User user);
-    boolean deleteUser(User user);
-    boolean updateUser(User user);
-    User login(User user);
-    boolean logout(User user);
+    UserResponseDTO createUser(UserRequestDTO user);
+    boolean deleteUser(int userId);
+    boolean updateUser(int id, UserRequestDTO userId);
+    UserResponseDTO login(UserRequestDTO user);
+    boolean logout(UserRequestDTO user);
 }

@@ -22,6 +22,11 @@ public class User {
         this.created_at = timestamp;
     }
 
+    public User(String name, String email, String password_hash){
+        this.name = name;
+        this.email = email;
+        this.password_hash = password_hash;
+    }
     @Override
     public String toString() {
         return "User{" +
