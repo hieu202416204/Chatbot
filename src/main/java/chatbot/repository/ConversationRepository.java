@@ -4,12 +4,13 @@ import chatbot.config.Connections;
 import chatbot.model.Conversation;
 import chatbot.model.User;
 import chatbot.repository.interfaces.ConversationRInterface;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+@Repository
 public class ConversationRepository implements ConversationRInterface {
     @Override
     public int createConversation(Conversation conversation) {

@@ -3,12 +3,13 @@ package chatbot.repository;
 import chatbot.config.Connections;
 import chatbot.model.User;
 import chatbot.repository.interfaces.UserRInterface;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+@Repository
 public class UserRepository implements UserRInterface {
     @Override
     public boolean createUser(User user) {

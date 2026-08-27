@@ -1,6 +1,7 @@
 package chatbot.DTO;
 
-import jakarta.validation.constraints.NotBlank;
+
+import java.util.List;
 
 public class MessageResponseDTO {
     private String content;

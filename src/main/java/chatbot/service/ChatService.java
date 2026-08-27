@@ -8,17 +8,21 @@ import chatbot.model.Conversation;
 import chatbot.model.Message;
 import chatbot.repository.interfaces.ConversationRInterface;
 import chatbot.repository.interfaces.MessageRInterface;
+import chatbot.service.interfaces.AISInterface;
 import chatbot.service.interfaces.ChatSInterface;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class ChatService implements ChatSInterface {
     private final ConversationRInterface conversationRepository;
     private final MessageRInterface messageRepository;
-    public ChatService(ConversationRInterface conversationRepository, MessageRInterface messageRepository){
+    private final AISInterface aiService;
+    public ChatService(ConversationRInterface conversationRepository, MessageRInterface messageRepository, AISInterface aiService){
         this.conversationRepository = conversationRepository;
         this.messageRepository = messageRepository;
+        this.aiService = aiService;
     }
 
 
@@ -31,17 +35,17 @@ public class ChatService implements ChatSInterface {
     }
 
     @Override
-    public MessageResponseDTO chat(int conversationId, String role,  MessageRequestDTO message) {
+    public MessageResponseDTO chat(int conversationId, MessageRequestDTO message) {
         // client gui
         Message newMessage = new Message();
         newMessage.setContent(message.getContent());
         newMessage.setConversation_id(conversationId);
-        newMessage.setRole(role);
+        newMessage.setRole("USER");
         messageRepository.createMessage(newMessage);
 
         // ai tra ve
         Message newMessageR = new Message();
-        newMessageR.setContent(message.getContent()); // goi ai o day
+        newMessageR.setContent(aiService.generateResponse(message.getContent())); // goi ai o day
         newMessageR.setConversation_id(conversationId);
         newMessageR.setRole("ASSISTANT");
         int responseId = messageRepository.createMessage(newMessageR);
@@ -89,9 +93,9 @@ public class ChatService implements ChatSInterface {
     }
 
     @Override
-    public List<MessageResponseDTO> getAllConversationMessages(int id) {
+    public List<MessageResponseDTO> getAllConversationMessages(int conversationId) {
         List<MessageResponseDTO> response = new ArrayList<>();
-        List<Message> request = messageRepository.getAllConversationMessages(id);
+        List<Message> request = messageRepository.getAllConversationMessages(conversationId);
         if(request!=null){
             for(Message m : request){
                 MessageResponseDTO newM = new MessageResponseDTO();
