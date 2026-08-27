@@ -22,7 +22,7 @@ public class UserService implements UserSInterface {
             UserResponseDTO response = new UserResponseDTO();
             response.setName(u.getName());
             response.setEmail(u.getEmail());
-            response.getId();
+            response.setId(u.getId());
             return response;
         }
         return null;

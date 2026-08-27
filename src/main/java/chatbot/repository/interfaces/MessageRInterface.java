@@ -11,5 +11,5 @@ public interface MessageRInterface {
     List<Message> findMessageByCID(int conversationID);
     boolean deleteMessage(int messageID);
     List<Message> getAllMessages();
-    List<Message> getAllConversationMessages(Conversation conversation);
+    List<Message> getAllConversationMessages(int conversationId);
 }

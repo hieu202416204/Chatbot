@@ -160,13 +160,13 @@ public class ConversationRepository implements ConversationRInterface {
     }
 
     @Override
-    public List<Conversation> getAllUserConversations(User user){
+    public List<Conversation> getAllUserConversations(int userId){
         List<Conversation> list = new ArrayList<>();
         String sql = """
                 select * from conversation where user_id = ?
                 """;
         try(Connection c = Connections.getConnection(); PreparedStatement ps = c.prepareStatement(sql)){
-            ps.setInt(1, user.getId());
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 Conversation conversation = new Conversation(rs.getInt("id"),rs.getString("title"), rs.getInt("user_id"), rs.getObject("created_at", LocalDateTime.class), rs.getObject("updated_at", LocalDateTime.class));

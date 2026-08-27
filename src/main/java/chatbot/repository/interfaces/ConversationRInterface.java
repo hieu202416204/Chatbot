@@ -12,5 +12,5 @@ public interface ConversationRInterface {
     boolean deleteConversation(int conversationID);
     boolean updateConversation(String title, int conversationID);
     List<Conversation> getAllConversations();
-    List<Conversation> getAllUserConversations(User user);
+    List<Conversation> getAllUserConversations(int userId);
 }

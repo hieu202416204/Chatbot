@@ -14,13 +14,15 @@ public class MessageRepository implements MessageRInterface {
     @Override
     public int createMessage(Message message) {
         String sql = """
-                insert into \"message\"(conversation_id, content) values(?,?)
+                insert into \"message\"(conversation_id, content, role) values(?,?,?)
                 """;
         int conversationID = message.getConversation_id();
         String content = message.getContent();
+        String role = message.getRole();
         try(Connection c = Connections.getConnection(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             ps.setInt(1, conversationID);
             ps.setString(2, content);
+            ps.setString(3, role);
             int check = ps.executeUpdate();
             if(check>0){
                 System.out.println("CREATE SUCCESSFUL!");
@@ -130,13 +132,13 @@ public class MessageRepository implements MessageRInterface {
         return list;
     }
     @Override
-    public List<Message> getAllConversationMessages(Conversation conversation){
+    public List<Message> getAllConversationMessages(int conversationId){
         List<Message> list = new ArrayList<>();
         String sql = """
                 select * from \"message\" where conversation_id = ?
                 """;
         try(Connection c = Connections.getConnection(); PreparedStatement ps = c.prepareStatement(sql)){
-            ps.setInt(1, conversation.getId());
+            ps.setInt(1, conversationId);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 Message message = new Message(rs.getInt("id"), rs.getInt("conversation_id"), rs.getString("content"),

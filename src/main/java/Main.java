@@ -9,6 +9,6 @@ public class Main {
         Connection c = Connections.getConnection();
 
         System.out.println(c);
-       Connections.closeConnection(c);
+       //Connections.closeConnection(c);
     }
 }
